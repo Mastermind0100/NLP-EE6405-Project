@@ -15,8 +15,8 @@ class NLPModel:
         nltk.download('stopwords')
         nltk.download('punkt')
 
-        with open(self.tokenizer_directory + 'news_tokenizer.pickle', 'rb') as handle:
-            self.news_tokenizer = pickle.load(handle)
+        with open(self.tokenizer_directory + 'movie_tokenizer.pickle', 'rb') as handle:
+            self.movie_tokenizer = pickle.load(handle)
 
     def import_weights(self, dataset) -> None:
         pass
@@ -34,7 +34,7 @@ class NLPModel:
         filtered_text = [word for word in word_tokens if word.lower() not in stop_words]
         return ' '.join(filtered_text)
 
-class NEWS_RNN(NLPModel):
+class MOVIE_RNN(NLPModel):
     def __init__(self) -> None:
         super().__init__()
     
@@ -45,10 +45,10 @@ class NEWS_RNN(NLPModel):
     def test_model(self, input_string):
         input_df = pd.DataFrame([input_string], columns=['text'])
         input_df['text'] = input_df['text'].apply(self.remove_stopwords)
-        adhoc_test_sequences = self.news_tokenizer.texts_to_sequences(input_df['text'])
+        adhoc_test_sequences = self.movie_tokenizer.texts_to_sequences(input_df['text'])
         formatted_x_test = pad_sequences(adhoc_test_sequences, maxlen=100)
 
-        loaded_model = self.import_weights('news')
+        loaded_model = self.import_weights('movie')
 
         label = loaded_model.predict(formatted_x_test).ravel()
         self.prediction = label[0].round()
@@ -61,14 +61,14 @@ class NEWS_RNN(NLPModel):
     
     def display_stats(self) -> None:
         return {
-            'f1_score': 0.8824,
-            'auc': 0.9374,
-            'precision': 0.9059,
-            'recall': 0.8600,
-            'accuracy': 0.8853
+            'f1_score': 0.8590,
+            'auc': 0.9309,
+            'precision': 0.8639,
+            'recall': 0.8541,
+            'accuracy': 0.8609
         }
     
-class NEWS_LSTM(NLPModel):
+class MOVIE_LSTM(NLPModel):
     def __init__(self) -> None:
         super().__init__()
     
@@ -79,10 +79,10 @@ class NEWS_LSTM(NLPModel):
     def test_model(self, input_string):
         input_df = pd.DataFrame([input_string], columns=['text'])
         input_df['text'] = input_df['text'].apply(self.remove_stopwords)
-        adhoc_test_sequences = self.news_tokenizer.texts_to_sequences(input_df['text'])
+        adhoc_test_sequences = self.movie_tokenizer.texts_to_sequences(input_df['text'])
         formatted_x_test = pad_sequences(adhoc_test_sequences, maxlen=100)
 
-        loaded_model = self.import_weights('news')
+        loaded_model = self.import_weights('movie')
 
         label = loaded_model.predict(formatted_x_test).ravel()
         self.prediction = label[0].round()
@@ -95,15 +95,15 @@ class NEWS_LSTM(NLPModel):
     
     def display_stats(self) -> None:
         return {
-            'f1_score': 0.9108,
-            'auc': 0.9721,
-            'precision': 0.9233,
-            'recall': 0.8987,
-            'accuracy': 0.9120
+            'f1_score': 0.8684,
+            'auc': 0.9392,
+            'precision': 0.8475,
+            'recall': 0.8904,
+            'accuracy': 0.8661
         }
     
 
-class NEWS_BiLSTM_CNN(NLPModel):
+class MOVIE_BiLSTM_CNN(NLPModel):
     def __init__(self) -> None:
         super().__init__()
     
@@ -114,10 +114,10 @@ class NEWS_BiLSTM_CNN(NLPModel):
     def test_model(self, input_string):
         input_df = pd.DataFrame([input_string], columns=['text'])
         input_df['text'] = input_df['text'].apply(self.remove_stopwords)
-        adhoc_test_sequences = self.news_tokenizer.texts_to_sequences(input_df['text'])
+        adhoc_test_sequences = self.movie_tokenizer.texts_to_sequences(input_df['text'])
         formatted_x_test = pad_sequences(adhoc_test_sequences, maxlen=100)
 
-        loaded_model = self.import_weights('news')
+        loaded_model = self.import_weights('movie')
 
         label = loaded_model.predict(formatted_x_test).ravel()
         self.prediction = label[0].round()
@@ -130,33 +130,34 @@ class NEWS_BiLSTM_CNN(NLPModel):
     
     def display_stats(self) -> None:
         return {
-            'f1_score': 0.9001,
-            'auc': 0.9638,
-            'precision': 0.8989,
-            'recall': 0.9013,
-            'accuracy': 0.9000
+            'f1_score': 0.8774,
+            'auc': 0.9446,
+            'precision': 0.8724,
+            'recall': 0.8823,
+            'accuracy': 0.8776
         }
         
 if __name__ == "__main__":
-    news_rnn = NEWS_RNN()
-    news_lstm = NEWS_LSTM()
-    news_bilstm_cnn = NEWS_BiLSTM_CNN()
-    print("Testing News RNN, with Reliable")
-    test_string = '''The Alberta province health minister wants to know if swine flu 
-                        shots were 'inappropriately diverted' to the Calgary Flames while thousands 
-                        had to stand in line for hours for the vaccine. Alberta Health Minister 
-                        Ron Liepert says he doesn't know where the NHL team got the vaccine, adding 
-                        that Alberta Health Services is the only supplier in the province. 
-                        Team president Ken King says the club contacted the department and asked for the clinic. 
-                        Health officials have begun an investigation into the special clinic, 
-                        which was held for the players and their families last Friday. 
-                        Liepert says the vaccine would be diverted only with the approval of the 
-                        chief medical officer of health, but he doesn't know if that was the case. 
-                        Alberta's opposition parties say professional ice hockey players shouldn't 
-                        be getting the vaccine ahead of cancer patients and pregnant women.
-                        '''
-    print(news_rnn.test_model(test_string))
-    print("Testing News LSTM, with Reliable")
-    print(news_lstm.test_model(test_string))
-    print("Testing News BiLSTM CNN, with Reliable")
-    print(news_bilstm_cnn.test_model(test_string))
+    movie_rnn = MOVIE_RNN()
+    movie_lstm = MOVIE_LSTM()
+    movie_bilstm_cnn = MOVIE_BiLSTM_CNN()
+
+    test_string = '''first trailer film viewed , curious angle storyline would take . 
+    plot one 's childhood self return present leaves open many options . 
+    Bruce Willis however superb job role given . surprised see well could act part . 
+    also good career move many others said seeing agree . 
+    film mainly remembering kid used , coming realization n't adult planned . 
+    wonderful story gripping tale makes us think . Usually scorn `` ... '' movies . 
+    example , Waterworld attempted answer question `` world covered water ... ? '' 
+    truthfully , nobody cared . movie however effects everyone theatre . True , 
+    young children may fully grasp idea growing dreams fizzle away , leaves great 
+    impact adults parents children . movie definitely worth seeing . Although , better
+      second time around wo n't thinking much ( kid got , stuff ) relax fun . 
+      take something leave cinema . Take piece childhood 've forgotten enjoy .'''
+
+    print("Testing MOVIE RNN, with Reliable")
+    print(movie_rnn.test_model(test_string))
+    print("Testing MOVIE LSTM, with Reliable")
+    print(movie_lstm.test_model(test_string))
+    print("Testing MOVIE BiLSTM CNN, with Reliable")
+    print(movie_bilstm_cnn.test_model(test_string))
