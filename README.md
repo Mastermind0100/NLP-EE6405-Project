@@ -1,5 +1,18 @@
 # NLP-EE6405-Project
 
+Hi, this is the final capstone project for Cluster D Table 26.
+
+## Frontend UI on Streamlit
+The frontend UI code is located in interface.py. You may run the streamlit front end by cloning this repository and starting it with interface.py.
+
+## Training code
+Model training code can be found in the jupyter notebooks folder.
+
+## Overall code
+The overall code is found in a notebook titled "Cluster D Table 26.ipynb", located in the jupyter notebooks folder.
+
+-------------------------------
+# Readme for Bert + Robert
 The code you can use in interface is "bert.py"
 
 ## How to use
